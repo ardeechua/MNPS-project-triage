@@ -2,6 +2,39 @@
 var triageForm = document.getElementById('triage-form');
 var totalScoreElement = document.getElementById('total-score');
 var priorityLevelElement = document.getElementById('priority-level');
+var scoreExplanationElement = document.getElementById('score-explanation');
+
+function toTitleCase(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function buildScoreExplanation(urgency, usersImpacted, complianceRequired, strategicAlignment) {
+  var explanationItems = [];
+
+  if (complianceRequired === 'yes') {
+    explanationItems.push('Compliance is required, so this adds a large boost to the score.');
+  } else {
+    explanationItems.push('Compliance is not required, so this did not add extra points.');
+  }
+
+  explanationItems.push('Urgency is set to ' + toTitleCase(urgency) + ', which affects how quickly this project should be reviewed.');
+
+  explanationItems.push('Users impacted is ' + usersImpacted + ', so the score reflects how many people this project can help.');
+
+  explanationItems.push('Strategic alignment is ' + toTitleCase(strategicAlignment) + ', which shows how strongly this supports district goals.');
+
+  return explanationItems;
+}
+
+function renderExplanationList(explanationItems) {
+  scoreExplanationElement.innerHTML = '';
+
+  for (var i = 0; i < explanationItems.length; i += 1) {
+    var listItem = document.createElement('li');
+    listItem.textContent = explanationItems[i];
+    scoreExplanationElement.appendChild(listItem);
+  }
+}
 
 // Form submit handling:
 // Listen for form submission, stop the page refresh,
@@ -42,8 +75,16 @@ triageForm.addEventListener('submit', function (event) {
     priorityLevel = 'High Priority';
   }
 
+  var explanationItems = buildScoreExplanation(
+    urgency,
+    usersImpacted,
+    complianceRequired,
+    strategicAlignment
+  );
+
   // Rendering the result:
   // Update the result area on the page with the new score and label.
   totalScoreElement.textContent = totalScore;
   priorityLevelElement.textContent = priorityLevel;
+  renderExplanationList(explanationItems);
 });
