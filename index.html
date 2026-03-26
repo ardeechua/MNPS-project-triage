@@ -21,23 +21,23 @@
       <h1>MNPS Project Triage</h1>
       <p>Use this form to calculate a project triage score.</p>
 
-      <form id="triage-form" action="#" method="post">
-        <p>
+      <form id="triage-form" class="compact-form" action="#" method="post">
+        <p class="field">
           <label for="project-name">Project Name</label><br>
           <input type="text" id="project-name" name="project_name" required>
         </p>
 
-        <p>
+        <p class="field">
           <label for="department">Department</label><br>
           <input type="text" id="department" name="department" required>
         </p>
 
-        <p>
+        <p class="field field-full">
           <label for="requested-outcome">Requested Outcome</label><br>
-          <textarea id="requested-outcome" name="requested_outcome" rows="5" cols="50" required></textarea>
+          <textarea id="requested-outcome" name="requested_outcome" rows="3" cols="50" required></textarea>
         </p>
 
-        <p>
+        <p class="field">
           <label for="urgency">Urgency</label><br>
           <select id="urgency" name="urgency" required>
             <option value="">Select urgency</option>
@@ -48,7 +48,7 @@
           </select>
         </p>
 
-        <p>
+        <p class="field">
           <label for="users-impacted">Users Impacted</label><br>
           <select id="users-impacted" name="users_impacted" required>
             <option value="">Select range</option>
@@ -59,7 +59,7 @@
           </select>
         </p>
 
-        <p>
+        <p class="field">
           <label for="compliance-required">Compliance Required</label><br>
           <select id="compliance-required" name="compliance_required" required>
             <option value="">Select option</option>
@@ -68,7 +68,7 @@
           </select>
         </p>
 
-        <p>
+        <p class="field">
           <label for="estimated-complexity">Estimated Complexity</label><br>
           <select id="estimated-complexity" name="estimated_complexity" required>
             <option value="">Select complexity</option>
@@ -78,7 +78,7 @@
           </select>
         </p>
 
-        <p>
+        <p class="field">
           <label for="strategic-alignment">Strategic Alignment</label><br>
           <select id="strategic-alignment" name="strategic_alignment" required>
             <option value="">Select alignment</option>
@@ -88,7 +88,7 @@
           </select>
         </p>
 
-        <p>
+        <p class="field field-full">
           <button type="submit">Calculate Score</button>
         </p>
       </form>
