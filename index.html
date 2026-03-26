@@ -86,58 +86,6 @@
     <p>Priority Level: <span id="priority-level">Not calculated yet</span></p>
   </section>
 
-  <script>
-    // Find the form on the page so we can listen for submit events.
-    var triageForm = document.getElementById('triage-form');
-    var totalScoreElement = document.getElementById('total-score');
-    var priorityLevelElement = document.getElementById('priority-level');
-
-    // Run this function every time the form is submitted.
-    triageForm.addEventListener('submit', function (event) {
-      // Stop the browser's default behavior (page refresh).
-      event.preventDefault();
-
-      // Collect all form values in one object so we can score each answer.
-      var formData = new FormData(triageForm);
-
-      // Read each field from the form.
-      var urgency = formData.get('urgency');
-      var usersImpacted = formData.get('users_impacted');
-      var complianceRequired = formData.get('compliance_required');
-      var estimatedComplexity = formData.get('estimated_complexity');
-      var strategicAlignment = formData.get('strategic_alignment');
-
-      // Scoring tables:
-      // Each answer maps directly to the points in the project triage rules.
-      var urgencyScores = { low: 5, medium: 10, high: 15, critical: 20 };
-      var usersImpactedScores = { '1-10': 5, '11-50': 10, '51-200': 15, '200+': 20 };
-      var complianceScores = { no: 0, yes: 25 };
-      var complexityScores = { low: 15, medium: 10, high: 5 };
-      var alignmentScores = { low: 5, medium: 10, high: 20 };
-
-      // Add up the points from each section to get a total score.
-      var totalScore =
-        urgencyScores[urgency] +
-        usersImpactedScores[usersImpacted] +
-        complianceScores[complianceRequired] +
-        complexityScores[estimatedComplexity] +
-        alignmentScores[strategicAlignment];
-
-      // Convert the score to a priority label.
-      // 0-39 => Low Priority, 40-69 => Review Needed, 70-100 => High Priority
-      var priorityLevel = '';
-      if (totalScore <= 39) {
-        priorityLevel = 'Low Priority';
-      } else if (totalScore <= 69) {
-        priorityLevel = 'Review Needed';
-      } else {
-        priorityLevel = 'High Priority';
-      }
-
-      // Display the result below the form.
-      totalScoreElement.textContent = totalScore;
-      priorityLevelElement.textContent = priorityLevel;
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
