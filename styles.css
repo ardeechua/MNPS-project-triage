@@ -58,7 +58,7 @@ body {
 }
 
 .page-wrap {
-  max-width: 1180px;
+  max-width: 1200px;
   margin: 1rem auto;
   padding: 0 1rem;
   display: grid;
@@ -142,21 +142,46 @@ textarea:focus {
   gap: 0.45rem;
 }
 
-.checkbox-group legend {
-  font-weight: 600;
+.checkbox-group legend,
+.outcome-group legend {
+  font-weight: 700;
   padding: 0 0.2rem;
 }
 
-.checkbox-group label {
+.checkbox-group label,
+.outcome-group label {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
   font-weight: 500;
   margin: 0;
 }
 
-.checkbox-group input[type='checkbox'] {
+.checkbox-group input[type='checkbox'],
+.outcome-group input[type='checkbox'] {
   width: auto;
+  margin-top: 0.12rem;
+}
+
+.helper-note {
+  margin: -0.2rem 0 0.2rem;
+  color: #586678;
+  font-size: 0.92rem;
+}
+
+.outcomes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.outcome-group {
+  border: 1px solid #d8e0e8;
+  border-radius: 10px;
+  padding: 0.55rem 0.6rem 0.65rem;
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
 }
 
 button {
@@ -189,6 +214,8 @@ button:hover {
 #score-explanation {
   margin: 0;
   padding-left: 1.15rem;
+  max-height: 45vh;
+  overflow: auto;
 }
 
 #score-explanation li {
@@ -205,9 +232,10 @@ button:hover {
   top: 1rem;
 }
 
-#score-explanation {
-  max-height: 45vh;
-  overflow: auto;
+@media (max-width: 1020px) {
+  .outcomes-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 860px) {
