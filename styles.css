@@ -1,1 +1,160 @@
+:root {
+  --mnps-blue: #007fa9;
+  --mnps-dark: #37485d;
+  --mnps-gold: #e6b44f;
+  --mnps-bg: #f1f3f5;
+  --mnps-border: #dde2e7;
+}
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Avenir Next", Arial, sans-serif;
+  color: var(--mnps-dark);
+  background: var(--mnps-bg);
+}
+
+.site-header {
+  height: 92px;
+  background: #fff;
+  border-bottom: 1px solid var(--mnps-border);
+  box-shadow: 0 2px 10px rgba(30, 45, 62, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0 2.5rem;
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--mnps-gold), #f4cb72);
+  color: #0d6c91;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.brand-text {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1.05;
+  display: grid;
+}
+
+.brand-metro,
+.brand-schools {
+  color: var(--mnps-blue);
+}
+
+.brand-nashville {
+  color: var(--mnps-gold);
+}
+
+.page-wrap {
+  max-width: 1040px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.25rem;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid var(--mnps-border);
+  border-radius: 16px;
+  padding: 1.4rem;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--mnps-dark);
+  margin-top: 0;
+}
+
+form p {
+  margin: 0 0 1rem;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  display: inline-block;
+}
+
+input,
+select,
+textarea,
+button {
+  width: 100%;
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid #cad3db;
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  background: #fff;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgba(0, 127, 169, 0.2);
+  border-color: var(--mnps-blue);
+}
+
+button {
+  margin-top: 0.4rem;
+  background: var(--mnps-blue);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.8rem 1.1rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button:hover {
+  background: #00698d;
+}
+
+#result p {
+  font-size: 1.05rem;
+}
+
+#total-score,
+#priority-level {
+  color: var(--mnps-blue);
+  font-weight: 700;
+}
+
+#score-explanation {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+#score-explanation li {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 860px) {
+  .page-wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .site-header {
+    padding: 0 1rem;
+    height: auto;
+    min-height: 80px;
+  }
+}

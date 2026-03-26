@@ -4,91 +4,105 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MNPS Project Triage</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>MNPS Project Triage</h1>
+  <header class="site-header">
+    <div class="brand-mark" aria-hidden="true">◓</div>
+    <div class="brand-text">
+      <span class="brand-metro">Metro</span>
+      <span class="brand-nashville">Nashville</span>
+      <span class="brand-schools">Public Schools</span>
+    </div>
+  </header>
 
-  <form id="triage-form" action="#" method="post">
-    <p>
-      <label for="project-name">Project Name</label><br>
-      <input type="text" id="project-name" name="project_name" required>
-    </p>
+  <main class="page-wrap">
+    <section class="panel">
+      <h1>MNPS Project Triage</h1>
 
-    <p>
-      <label for="department">Department</label><br>
-      <input type="text" id="department" name="department" required>
-    </p>
+      <form id="triage-form" action="#" method="post">
+        <p>
+          <label for="project-name">Project Name</label><br>
+          <input type="text" id="project-name" name="project_name" required>
+        </p>
 
-    <p>
-      <label for="requested-outcome">Requested Outcome</label><br>
-      <textarea id="requested-outcome" name="requested_outcome" rows="5" cols="50" required></textarea>
-    </p>
+        <p>
+          <label for="department">Department</label><br>
+          <input type="text" id="department" name="department" required>
+        </p>
 
-    <p>
-      <label for="urgency">Urgency</label><br>
-      <select id="urgency" name="urgency" required>
-        <option value="">Select urgency</option>
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-        <option value="critical">Critical</option>
-      </select>
-    </p>
+        <p>
+          <label for="requested-outcome">Requested Outcome</label><br>
+          <textarea id="requested-outcome" name="requested_outcome" rows="5" cols="50" required></textarea>
+        </p>
 
-    <p>
-      <label for="users-impacted">Users Impacted</label><br>
-      <select id="users-impacted" name="users_impacted" required>
-        <option value="">Select range</option>
-        <option value="1-10">1-10</option>
-        <option value="11-50">11-50</option>
-        <option value="51-200">51-200</option>
-        <option value="200+">200+</option>
-      </select>
-    </p>
+        <p>
+          <label for="urgency">Urgency</label><br>
+          <select id="urgency" name="urgency" required>
+            <option value="">Select urgency</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="critical">Critical</option>
+          </select>
+        </p>
 
-    <p>
-      <label for="compliance-required">Compliance Required</label><br>
-      <select id="compliance-required" name="compliance_required" required>
-        <option value="">Select option</option>
-        <option value="no">No</option>
-        <option value="yes">Yes</option>
-      </select>
-    </p>
+        <p>
+          <label for="users-impacted">Users Impacted</label><br>
+          <select id="users-impacted" name="users_impacted" required>
+            <option value="">Select range</option>
+            <option value="1-10">1-10</option>
+            <option value="11-50">11-50</option>
+            <option value="51-200">51-200</option>
+            <option value="200+">200+</option>
+          </select>
+        </p>
 
-    <p>
-      <label for="estimated-complexity">Estimated Complexity</label><br>
-      <select id="estimated-complexity" name="estimated_complexity" required>
-        <option value="">Select complexity</option>
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-    </p>
+        <p>
+          <label for="compliance-required">Compliance Required</label><br>
+          <select id="compliance-required" name="compliance_required" required>
+            <option value="">Select option</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </p>
 
-    <p>
-      <label for="strategic-alignment">Strategic Alignment</label><br>
-      <select id="strategic-alignment" name="strategic_alignment" required>
-        <option value="">Select alignment</option>
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-    </p>
+        <p>
+          <label for="estimated-complexity">Estimated Complexity</label><br>
+          <select id="estimated-complexity" name="estimated_complexity" required>
+            <option value="">Select complexity</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </p>
 
-    <p>
-      <button type="submit">Calculate Score</button>
-    </p>
-  </form>
+        <p>
+          <label for="strategic-alignment">Strategic Alignment</label><br>
+          <select id="strategic-alignment" name="strategic_alignment" required>
+            <option value="">Select alignment</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </p>
 
-  <section id="result" aria-live="polite">
-    <h2>Triage Result</h2>
-    <p>Total Score: <span id="total-score">0</span></p>
-    <p>Priority Level: <span id="priority-level">Not calculated yet</span></p>
-    <h3>Why this score</h3>
-    <ul id="score-explanation">
-      <li>Submit the form to see the main reasons behind the score.</li>
-    </ul>
-  </section>
+        <p>
+          <button type="submit">Calculate Score</button>
+        </p>
+      </form>
+    </section>
+
+    <section id="result" class="panel" aria-live="polite">
+      <h2>Triage Result</h2>
+      <p>Total Score: <span id="total-score">0</span></p>
+      <p>Priority Level: <span id="priority-level">Not calculated yet</span></p>
+      <h3>Why this score</h3>
+      <ul id="score-explanation">
+        <li>Submit the form to see the main reasons behind the score.</li>
+      </ul>
+    </section>
+  </main>
 
   <script src="script.js"></script>
 </body>
