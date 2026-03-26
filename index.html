@@ -89,7 +89,18 @@
 
         <p class="field field-full">
           <label for="support-owner">Who will be responsible for ongoing support, maintenance, and user issues after go-live?</label><br>
-          <input type="text" id="support-owner" name="support_owner" placeholder="Name team or role (not just ‘IT’)" required>
+          <input type="text" id="support-owner" name="support_owner" placeholder="Example: HR Systems team, Vendor support, BPA team — not just ‘IT’" required>
+        </p>
+
+        <p class="field field-full">
+          <label for="support-commitment">Has this support group been consulted and agreed to provide ongoing support?</label><br>
+          <select id="support-commitment" name="support_commitment" required>
+            <option value="">Select option</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="not_yet">Not yet</option>
+            <option value="not_applicable">Not applicable</option>
+          </select>
         </p>
 
         <p class="field field-full">
@@ -124,11 +135,11 @@
         </p>
 
         <p class="field">
-          <label for="ai-component">Is there an AI component?</label><br>
+          <label for="ai-component">Does this request include any AI component or AI-enabled feature?</label><br>
           <select id="ai-component" name="ai_component" required>
             <option value="">Select option</option>
-            <option value="no">No</option>
             <option value="yes">Yes</option>
+            <option value="no">No</option>
             <option value="unsure">Unsure</option>
           </select>
         </p>
@@ -224,53 +235,20 @@
           </select>
         </p>
 
-        <h2 class="section-title field-full">District Focused Outcomes / Initiatives</h2>
+        <h2 class="section-title field-full">Which district focused outcomes or initiatives does this support?</h2>
         <p class="field-full helper-note">Select all that apply.</p>
 
-        <div class="field-full outcomes-grid">
-          <fieldset class="outcome-group">
-            <legend>Grades Pre-K, 1, 2, 3 and 4</legend>
-            <label><input type="checkbox" name="focused_outcomes" value="Pre-K–4 Literacy"> Pre-K–4 Literacy</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Pre-K–4 Numeracy"> Pre-K–4 Numeracy</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Pre-K–4 Attendance"> Pre-K–4 Attendance</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Pre-K–4 Personal Growth and Development"> Pre-K–4 Personal Growth and Development</label>
-          </fieldset>
-
-          <fieldset class="outcome-group">
-            <legend>Grade 5</legend>
-            <label><input type="checkbox" name="focused_outcomes" value="Grade 5 Literacy"> Grade 5 Literacy</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grade 5 Numeracy"> Grade 5 Numeracy</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grade 5 Attendance"> Grade 5 Attendance</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grade 5 Transition Preparation"> Grade 5 Transition Preparation</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grade 5 Personal Growth and Development"> Grade 5 Personal Growth and Development</label>
-          </fieldset>
-
-          <fieldset class="outcome-group">
-            <legend>Grades 6, 7 and 8</legend>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 6–8 Literacy"> Grades 6–8 Literacy</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 6–8 Numeracy"> Grades 6–8 Numeracy</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 6–8 Attendance"> Grades 6–8 Attendance</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 6–8 Transition Preparation"> Grades 6–8 Transition Preparation</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 6–8 Personal Growth and Development"> Grades 6–8 Personal Growth and Development</label>
-          </fieldset>
-
-          <fieldset class="outcome-group">
-            <legend>Grades 9 and 10</legend>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 9–10 Literacy"> Grades 9–10 Literacy</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 9–10 Numeracy"> Grades 9–10 Numeracy</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 9–10 Attendance"> Grades 9–10 Attendance</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 9–10 On-Track Graduation"> Grades 9–10 On-Track Graduation</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 9–10 Personal Growth and Development"> Grades 9–10 Personal Growth and Development</label>
-          </fieldset>
-
-          <fieldset class="outcome-group">
-            <legend>Grades 11 and 12</legend>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 11–12 Attendance"> Grades 11–12 Attendance</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 11–12 On-Track Graduation"> Grades 11–12 On-Track Graduation</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 11–12 Transition to Post-Secondary"> Grades 11–12 Transition to Post-Secondary</label>
-            <label><input type="checkbox" name="focused_outcomes" value="Grades 11–12 Personal Growth and Development"> Grades 11–12 Personal Growth and Development</label>
-          </fieldset>
-        </div>
+        <fieldset class="field-full checkbox-group outcomes-checkboxes">
+          <label><input type="checkbox" name="focused_outcomes" value="Literacy"> Literacy</label>
+          <label><input type="checkbox" name="focused_outcomes" value="Numeracy"> Numeracy</label>
+          <label><input type="checkbox" name="focused_outcomes" value="Attendance"> Attendance</label>
+          <label><input type="checkbox" name="focused_outcomes" value="Personal Growth and Development"> Personal Growth and Development</label>
+          <label><input type="checkbox" name="focused_outcomes" value="Transition Preparation"> Transition Preparation</label>
+          <label><input type="checkbox" name="focused_outcomes" value="On-Track Graduation"> On-Track Graduation</label>
+          <label><input type="checkbox" name="focused_outcomes" value="Transition to Post-Secondary"> Transition to Post-Secondary</label>
+          <label><input type="checkbox" name="focused_outcomes" value="None / Not directly aligned"> None / Not directly aligned</label>
+          <label><input type="checkbox" name="focused_outcomes" value="Unsure"> Unsure</label>
+        </fieldset>
 
         <p class="field field-full">
           <button type="submit">Calculate Intake Result</button>
