@@ -3,6 +3,7 @@ var totalScoreElement = document.getElementById('total-score');
 var recommendedRouteElement = document.getElementById('recommended-route');
 var priorityLevelElement = document.getElementById('priority-level');
 var scoreExplanationElement = document.getElementById('score-explanation');
+var warningListElement = document.getElementById('warning-list');
 
 function renderExplanationList(explanationItems) {
   scoreExplanationElement.innerHTML = '';
@@ -14,13 +15,37 @@ function renderExplanationList(explanationItems) {
   }
 }
 
+function renderWarningList(warningItems) {
+  warningListElement.innerHTML = '';
+
+  if (warningItems.length === 0) {
+    var emptyItem = document.createElement('li');
+    emptyItem.textContent = 'No warnings flagged based on current inputs.';
+    warningListElement.appendChild(emptyItem);
+    return;
+  }
+
+  for (var i = 0; i < warningItems.length; i += 1) {
+    var warningItem = document.createElement('li');
+    warningItem.textContent = warningItems[i];
+    warningListElement.appendChild(warningItem);
+  }
+}
+
 function includesUnsure(value) {
   return value === 'unsure' || value === '' || value === null;
 }
 
-function looksLikeGenericItSupport(text) {
+function looksLikeGenericSupport(text) {
   var normalized = (text || '').trim().toLowerCase();
-  return normalized === '' || normalized === 'it' || normalized === 'it team' || normalized === 'technology';
+  return (
+    normalized === '' ||
+    normalized === 'it' ||
+    normalized === 'it team' ||
+    normalized === 'technology' ||
+    normalized === 'tbd' ||
+    normalized === 'unsure'
+  );
 }
 
 function calculateScore(urgency, usersImpacted, estimatedComplexity, outcomesCount) {
@@ -49,7 +74,33 @@ function calculatePriority(totalScore, urgency, outcomesCount) {
   return 'Low Priority';
 }
 
-function determineRoute(values) {
+function getWarnings(values) {
+  var warnings = [];
+
+  if (values.existingSolutionAwareness === 'unsure') {
+    warnings.push('Existing solution not confirmed (marked Unsure).');
+  }
+
+  if (looksLikeGenericSupport(values.supportOwner)) {
+    warnings.push('Support ownership is unclear or too vague.');
+  }
+
+  if (values.budgetAllocated === 'no' || values.budgetAllocated === 'unsure') {
+    warnings.push('No confirmed budget identified for this request.');
+  }
+
+  if (values.solutionLongevity === 'lt_1_year') {
+    warnings.push('Short-term solution (<1 year) may not justify build effort.');
+  }
+
+  if (values.vendorSolution === 'yes' || values.vendorSolution === 'unsure') {
+    warnings.push('A vendor option may exist and should be evaluated before building.');
+  }
+
+  return warnings;
+}
+
+function determineRoute(values, warnings) {
   var explanationItems = [];
   var route = 'Approve – Route to Development Team';
   var missingKeyInfo =
@@ -58,25 +109,26 @@ function determineRoute(values) {
     !values.requestedOutcome ||
     includesUnsure(values.requestType) ||
     includesUnsure(values.solutionLongevity);
+  var supportUnclear = looksLikeGenericSupport(values.supportOwner);
 
-  if (missingKeyInfo || looksLikeGenericItSupport(values.supportOwner)) {
+  if (missingKeyInfo || supportUnclear) {
     route = 'Need More Information';
-    explanationItems.push('Key ownership, support, request detail, or lifespan information is incomplete for routing.');
+    explanationItems.push('Need More Information selected because ownership/support clarity or core scoping details are incomplete.');
   }
 
-  if (values.vendorSolution === 'yes') {
+  if (values.vendorSolution === 'yes' || values.vendorSolution === 'unsure') {
     route = 'Recommend Buy / RFP';
-    explanationItems.push('An existing vendor/product option is available, so buy/RFP evaluation is recommended first.');
+    explanationItems.push('Vendor solution is marked ' + values.vendorSolution + ', so buy/RFP review is recommended before custom build.');
   }
 
   if (values.requestType === 'simple_workflow' && route !== 'Recommend Buy / RFP') {
     route = 'Approve – Route to BPA Team';
-    explanationItems.push('Simple workflow/automation requests are typically routed to the BPA Team.');
+    explanationItems.push('Request classified as Simple workflow / automation, so it leans to BPA Team routing.');
   }
 
   if (values.requestType === 'new_application' && route !== 'Recommend Buy / RFP' && route !== 'Need More Information') {
     route = 'Approve – Route to Development Team';
-    explanationItems.push('New application/system requests usually require Development Team delivery.');
+    explanationItems.push('Request classified as New application / system, so Development Team routing is the best fit.');
   }
 
   if (values.requestType === 'data_reporting' && route !== 'Recommend Buy / RFP' && route !== 'Need More Information') {
@@ -89,20 +141,24 @@ function determineRoute(values) {
     explanationItems.push('Enhancements to existing systems are usually handled by Development Team workflows.');
   }
 
-  if (values.existingSolutionAwareness === 'yes' || values.existingSolutionAwareness === 'unsure') {
-    explanationItems.push('An internal effort may already exist, so duplication risk should be reviewed before work starts.');
+  if (values.existingSolutionAwareness === 'yes') {
+    explanationItems.push('Existing solution awareness is Yes, which creates duplication risk that must be validated.');
+  }
+
+  if (values.existingSolutionAwareness === 'unsure') {
+    explanationItems.push('Existing solution awareness is Unsure, so duplication risk remains unresolved.');
   }
 
   if (values.aiComponent === 'yes') {
-    explanationItems.push('AI is included, so additional governance, privacy, and security review may be required.');
+    explanationItems.push('AI component is Yes, so additional governance, privacy, and security review is required.');
   }
 
   if (values.budgetAllocated === 'no' || values.budgetAllocated === 'unsure') {
-    explanationItems.push('Budget is not confirmed, which is a planning dependency and potential risk.');
+    explanationItems.push('Budget is ' + values.budgetAllocated + ', so funding risk is part of the routing recommendation.');
   }
 
   if (values.solutionLongevity === 'lt_1_year') {
-    explanationItems.push('The need is short-term (<1 year), which may affect the level of effort that is justified.');
+    explanationItems.push('Longevity is Less than 1 year, so the implementation effort may not be justified.');
   }
 
   if (values.focusedOutcomes.length >= 5) {
@@ -124,12 +180,21 @@ function determineRoute(values) {
   }
 
   if (
-    values.vendorSolution === 'yes' &&
+    (values.vendorSolution === 'yes' || values.vendorSolution === 'unsure') &&
     values.existingSolutionAwareness === 'yes' &&
     values.requestType === 'unsure'
   ) {
     route = 'Reject / No';
     explanationItems.push('Existing internal and vendor options exist without a clear gap statement, so this should not proceed yet.');
+  }
+
+  if (supportUnclear && route !== 'Need More Information') {
+    route = 'Need More Information';
+    explanationItems.push('Support owner response is unclear (for example, IT/TBD/Unsure), so more accountability detail is required.');
+  }
+
+  if (warnings.length > 0) {
+    explanationItems.push('Warnings/Risks were triggered and should be resolved before final approval.');
   }
 
   if (explanationItems.length === 0) {
@@ -170,7 +235,8 @@ triageForm.addEventListener('submit', function (event) {
   );
 
   var priorityLevel = calculatePriority(totalScore, values.urgency, values.focusedOutcomes.length);
-  var routeResult = determineRoute(values);
+  var warnings = getWarnings(values);
+  var routeResult = determineRoute(values, warnings);
 
   routeResult.explanationItems.unshift(
     'Priority level is ' +
@@ -182,4 +248,5 @@ triageForm.addEventListener('submit', function (event) {
   recommendedRouteElement.textContent = routeResult.route;
   priorityLevelElement.textContent = priorityLevel;
   renderExplanationList(routeResult.explanationItems);
+  renderWarningList(warnings);
 });
