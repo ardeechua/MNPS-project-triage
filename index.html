@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MNPS Project Triage</title>
+  <title>MNPS Project Intake</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,10 +18,12 @@
 
   <main class="page-wrap">
     <section class="panel form-panel">
-      <h1>MNPS Project Triage</h1>
-      <p>Use this form to calculate a project triage score.</p>
+      <h1>MNPS Project Intake</h1>
+      <p>Submit this form to evaluate, route, and prioritize a request before work begins.</p>
 
       <form id="triage-form" class="compact-form" action="#" method="post">
+        <h2 class="section-title field-full">Basic Information</h2>
+
         <p class="field">
           <label for="project-name">Project Name</label><br>
           <input type="text" id="project-name" name="project_name" required>
@@ -33,9 +35,144 @@
         </p>
 
         <p class="field field-full">
-          <label for="requested-outcome">Requested Outcome</label><br>
-          <textarea id="requested-outcome" name="requested_outcome" rows="3" cols="50" required></textarea>
+          <label for="business-owner-requestor">Business Owner / Requestor</label><br>
+          <input type="text" id="business-owner-requestor" name="business_owner_requestor" required>
         </p>
+
+        <p class="field field-full">
+          <label for="requested-outcome">Requested Outcome / Problem to Solve</label><br>
+          <textarea id="requested-outcome" name="requested_outcome" rows="3" required></textarea>
+        </p>
+
+        <h2 class="section-title field-full">Existing Work Check</h2>
+
+        <p class="field field-full">
+          <label for="existing-solution-awareness">Are you aware of an existing system, tool, or effort that already solves or is attempting to solve this problem?</label><br>
+          <select id="existing-solution-awareness" name="existing_solution_awareness" required>
+            <option value="">Select an option</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+            <option value="unsure">Unsure</option>
+          </select>
+        </p>
+
+        <p class="field field-full">
+          <label for="existing-solution-details">If yes or unsure, describe the existing solution or effort</label><br>
+          <textarea id="existing-solution-details" name="existing_solution_details" rows="3"></textarea>
+        </p>
+
+        <fieldset class="field field-full checkbox-group">
+          <legend>Have you already spoken with any of these teams?</legend>
+          <label><input type="checkbox" name="teams_spoken" value="product"> Product Team</label>
+          <label><input type="checkbox" name="teams_spoken" value="development"> Development Team</label>
+          <label><input type="checkbox" name="teams_spoken" value="bpa"> BPA Team</label>
+          <label><input type="checkbox" name="teams_spoken" value="procurement"> Procurement / Vendor Team</label>
+          <label><input type="checkbox" name="teams_spoken" value="none"> None</label>
+        </fieldset>
+
+        <h2 class="section-title field-full">Ownership and Support</h2>
+
+        <p class="field field-full">
+          <label for="post-go-live-owner">Who will be the business owner after go-live?</label><br>
+          <input type="text" id="post-go-live-owner" name="post_go_live_owner" required>
+        </p>
+
+        <p class="field">
+          <label for="support-owner">Who will support this solution after implementation?</label><br>
+          <select id="support-owner" name="support_owner" required>
+            <option value="">Select owner</option>
+            <option value="business_department">Business Department</option>
+            <option value="product_team">Product Team</option>
+            <option value="development_team">Development Team</option>
+            <option value="bpa_team">BPA Team</option>
+            <option value="vendor">Vendor</option>
+            <option value="unsure">Unsure</option>
+          </select>
+        </p>
+
+        <p class="field field-full">
+          <label for="training-plan">What is the training plan for end users?</label><br>
+          <textarea id="training-plan" name="training_plan" rows="3" required></textarea>
+        </p>
+
+        <h2 class="section-title field-full">Request Type / Routing</h2>
+
+        <p class="field">
+          <label for="request-type">What best describes this request?</label><br>
+          <select id="request-type" name="request_type" required>
+            <option value="">Select request type</option>
+            <option value="simple_workflow">Simple workflow / automation</option>
+            <option value="data_reporting">Data / reporting request</option>
+            <option value="enhancement">Enhancement to existing system</option>
+            <option value="new_application">New application / system</option>
+            <option value="unsure">Unsure</option>
+          </select>
+        </p>
+
+        <p class="field">
+          <label for="ai-component">Is there an AI component?</label><br>
+          <select id="ai-component" name="ai_component" required>
+            <option value="">Select option</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+            <option value="unsure">Unsure</option>
+          </select>
+        </p>
+
+        <p class="field">
+          <label for="users-description">Who will be using this?</label><br>
+          <input type="text" id="users-description" name="users_description" required>
+        </p>
+
+        <p class="field">
+          <label for="users-impacted">How many users will this impact?</label><br>
+          <select id="users-impacted" name="users_impacted" required>
+            <option value="">Select range</option>
+            <option value="1-10">1-10</option>
+            <option value="11-100">11-100</option>
+            <option value="101-1000">101-1000</option>
+            <option value="district-wide">District-wide</option>
+          </select>
+        </p>
+
+        <h2 class="section-title field-full">Build vs Buy / Vendor Check</h2>
+
+        <p class="field">
+          <label for="vendor-solution">Is there an existing product or vendor solution that could meet this need?</label><br>
+          <select id="vendor-solution" name="vendor_solution" required>
+            <option value="">Select option</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+            <option value="unsure">Unsure</option>
+          </select>
+        </p>
+
+        <p class="field">
+          <label for="district-contract">Do we already have a district contract with the product/vendor?</label><br>
+          <select id="district-contract" name="district_contract" required>
+            <option value="">Select option</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+            <option value="unsure">Unsure</option>
+          </select>
+        </p>
+
+        <p class="field">
+          <label for="data-sharing">Do we already have a district data sharing agreement in place?</label><br>
+          <select id="data-sharing" name="data_sharing" required>
+            <option value="">Select option</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+            <option value="unsure">Unsure</option>
+          </select>
+        </p>
+
+        <p class="field field-full">
+          <label for="vendor-details">If yes or unsure, explain what is already in place</label><br>
+          <textarea id="vendor-details" name="vendor_details" rows="3"></textarea>
+        </p>
+
+        <h2 class="section-title field-full">Priority / Effort</h2>
 
         <p class="field">
           <label for="urgency">Urgency</label><br>
@@ -45,26 +182,6 @@
             <option value="medium">Medium</option>
             <option value="high">High</option>
             <option value="critical">Critical</option>
-          </select>
-        </p>
-
-        <p class="field">
-          <label for="users-impacted">Users Impacted</label><br>
-          <select id="users-impacted" name="users_impacted" required>
-            <option value="">Select range</option>
-            <option value="1-10">1-10</option>
-            <option value="11-50">11-50</option>
-            <option value="51-200">51-200</option>
-            <option value="200+">200+</option>
-          </select>
-        </p>
-
-        <p class="field">
-          <label for="compliance-required">Compliance Required</label><br>
-          <select id="compliance-required" name="compliance_required" required>
-            <option value="">Select option</option>
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
           </select>
         </p>
 
@@ -89,7 +206,7 @@
         </p>
 
         <p class="field field-full">
-          <button type="submit">Calculate Score</button>
+          <button type="submit">Calculate Intake Result</button>
         </p>
       </form>
     </section>
@@ -97,10 +214,11 @@
     <section id="result" class="panel result-panel" aria-live="polite">
       <h2>Triage Result</h2>
       <p>Total Score: <span id="total-score">0</span></p>
+      <p>Recommended Route: <span id="recommended-route">Not calculated yet</span></p>
       <p>Priority Level: <span id="priority-level">Not calculated yet</span></p>
-      <h3>Why this score</h3>
+      <h3>Why this result</h3>
       <ul id="score-explanation">
-        <li>Submit the form to see the main reasons behind the score.</li>
+        <li>Submit the form to see routing guidance and reasons.</li>
       </ul>
     </section>
   </main>
