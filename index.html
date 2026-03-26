@@ -8,7 +8,7 @@
 <body>
   <h1>MNPS Project Triage</h1>
 
-  <form action="#" method="post">
+  <form id="triage-form" action="#" method="post">
     <p>
       <label for="project-name">Project Name</label><br>
       <input type="text" id="project-name" name="project_name" required>
@@ -79,5 +79,24 @@
       <button type="submit">Calculate Score</button>
     </p>
   </form>
+
+  <script>
+    // Find the form on the page so we can listen for submit events.
+    var triageForm = document.getElementById('triage-form');
+
+    // Run this function every time the form is submitted.
+    triageForm.addEventListener('submit', function (event) {
+      // Stop the browser's default behavior (page refresh).
+      event.preventDefault();
+
+      // Collect all form values in one object.
+      var formData = new FormData(triageForm);
+
+      // Loop through each field and log its name and value to the console.
+      formData.forEach(function (value, fieldName) {
+        console.log(fieldName + ':', value);
+      });
+    });
+  </script>
 </body>
 </html>
