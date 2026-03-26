@@ -40,7 +40,7 @@
         </p>
 
         <p class="field">
-          <label for="requestor-boss">Business Owner / Requestor’s Boss</label><br>
+          <label for="requestor-boss">Supervisor / Executive Sponsor</label><br>
           <input type="text" id="requestor-boss" name="requestor_boss" required>
         </p>
 
@@ -88,8 +88,8 @@
         </p>
 
         <p class="field field-full">
-          <label for="support-owner">Who will support this solution after implementation?</label><br>
-          <input type="text" id="support-owner" name="support_owner" required>
+          <label for="support-owner">Who will be responsible for ongoing support, maintenance, and user issues after go-live?</label><br>
+          <input type="text" id="support-owner" name="support_owner" placeholder="Name team or role (not just ‘IT’)" required>
         </p>
 
         <p class="field field-full">
@@ -283,9 +283,13 @@
       <p>Total Score: <span id="total-score">0</span></p>
       <p>Recommended Route: <span id="recommended-route">Not calculated yet</span></p>
       <p>Priority Level: <span id="priority-level">Not calculated yet</span></p>
-      <h3>Why this result</h3>
+      <h3>Why This Result</h3>
       <ul id="score-explanation">
         <li>Submit the form to see routing guidance and reasons.</li>
+      </ul>
+      <h3 class="warnings-title">Warnings / Risks</h3>
+      <ul id="warning-list" class="warning-list">
+        <li>No warnings flagged yet.</li>
       </ul>
     </section>
   </main>
