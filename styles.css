@@ -1,91 +1,139 @@
+/* ==============================
+   Theme tokens
+================================= */
 :root {
-  --mnps-blue: #007fa9;
-  --mnps-dark: #37485d;
-  --mnps-gold: #e6b44f;
-  --mnps-bg: #f1f3f5;
-  --mnps-border: #dde2e7;
+  --mnps-blue: #0079a2;
+  --mnps-blue-dark: #005f80;
+  --mnps-blue-soft: #e8f3f8;
+  --mnps-gold: #f1b434;
+  --mnps-gold-soft: #fff6e0;
+  --mnps-light-gray: #e6e7e8;
+  --mnps-text: #4d4d4f;
+  --mnps-muted: #6c6f73;
+  --mnps-success: #2f8f4e;
+  --surface: #ffffff;
+  --surface-alt: #f8f9fa;
+  --border: #d8dde2;
+  --shadow-soft: 0 8px 24px rgba(16, 39, 56, 0.08);
 }
 
+/* ==============================
+   Base and layout
+================================= */
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: "Segoe UI", "Avenir Next", Arial, sans-serif;
-  color: var(--mnps-dark);
-  background: var(--mnps-bg);
   min-height: 100vh;
-}
-
-.site-header {
-  height: 74px;
-  background: #fff;
-  border-bottom: 1px solid var(--mnps-border);
-  box-shadow: 0 2px 10px rgba(30, 45, 62, 0.1);
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 0 1.5rem;
-}
-
-.brand-mark {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, var(--mnps-gold), #f4cb72);
-  color: #0d6c91;
-  display: grid;
-  place-items: center;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.brand-text {
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  line-height: 1.05;
-  display: grid;
-}
-
-.brand-metro,
-.brand-schools {
-  color: var(--mnps-blue);
-}
-
-.brand-nashville {
-  color: var(--mnps-gold);
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--mnps-text);
+  background:
+    linear-gradient(180deg, rgba(0, 121, 162, 0.08) 0, rgba(0, 121, 162, 0) 240px),
+    var(--surface-alt);
+  line-height: 1.5;
 }
 
 .page-wrap {
-  max-width: 1200px;
-  margin: 1rem auto;
-  padding: 0 1rem;
+  max-width: 1220px;
+  margin: 1.5rem auto 2.5rem;
+  padding: 0 1.25rem;
   display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr);
+  gap: 1.25rem;
   align-items: start;
 }
 
 .panel {
-  background: #fff;
-  border: 1px solid var(--mnps-border);
-  border-radius: 16px;
-  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-soft);
+  padding: 1.25rem;
 }
 
+/* ==============================
+   Header / branding
+================================= */
+.site-header {
+  min-height: 90px;
+  background: linear-gradient(90deg, #0079a2 0%, #006489 100%);
+  border-bottom: 4px solid var(--mnps-gold);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem 1.4rem;
+}
+
+.brand-mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--mnps-gold);
+  color: #1f3a4a;
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.22);
+}
+
+.brand-text {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.08;
+  display: grid;
+  font-weight: 700;
+}
+
+.brand-metro,
+.brand-schools,
+.brand-nashville {
+  color: #fff;
+}
+
+/* ==============================
+   Typography
+================================= */
 h1,
 h2,
 h3 {
-  color: var(--mnps-dark);
+  font-family: "museo-slab", Georgia, "Times New Roman", serif;
   margin-top: 0;
-  margin-bottom: 0.5rem;
+  color: #17384a;
+  line-height: 1.25;
 }
 
+h1 {
+  font-size: clamp(1.55rem, 2vw, 2rem);
+  margin-bottom: 0.35rem;
+}
+
+h2 {
+  font-size: 1.18rem;
+  margin-bottom: 0.45rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin-bottom: 0.45rem;
+}
+
+.form-panel > p {
+  margin: 0 0 1rem;
+  color: var(--mnps-muted);
+  max-width: 78ch;
+}
+
+/* ==============================
+   Form sections and fields
+================================= */
 .compact-form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.7rem 0.9rem;
+  gap: 0.9rem 1rem;
 }
 
 .compact-form .field {
@@ -99,9 +147,16 @@ h3 {
 .section-title {
   font-size: 1rem;
   font-weight: 700;
-  margin: 0.8rem 0 0.2rem;
-  padding-top: 0.8rem;
-  border-top: 1px solid var(--mnps-border);
+  margin: 1.15rem 0 0.2rem;
+  padding: 0.8rem 0 0.15rem;
+  border-top: 1px solid var(--mnps-light-gray);
+  color: #1f4e64;
+}
+
+.section-title:first-of-type {
+  margin-top: 0.2rem;
+  border-top: 0;
+  padding-top: 0;
 }
 
 label {
@@ -121,30 +176,47 @@ button {
 input,
 select,
 textarea {
-  border: 1px solid #cad3db;
+  border: 1px solid #c7cfd8;
   border-radius: 8px;
-  padding: 0.5rem 0.7rem;
+  padding: 0.62rem 0.75rem;
   background: #fff;
+  color: var(--mnps-text);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 94px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #8a8d91;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  outline: 2px solid rgba(0, 127, 169, 0.2);
+  outline: 3px solid rgba(0, 121, 162, 0.18);
   border-color: var(--mnps-blue);
 }
 
+/* ==============================
+   Checkboxes and checklist states
+================================= */
 .checkbox-group {
-  border: 1px solid #cad3db;
-  border-radius: 8px;
-  padding: 0.7rem;
+  margin: 0;
+  border: 1px solid #cfd7df;
+  border-radius: 10px;
+  background: #fcfdfe;
+  padding: 0.85rem;
   display: grid;
-  gap: 0.45rem;
+  gap: 0.6rem;
 }
 
 .checkbox-group legend {
   font-weight: 700;
-  padding: 0 0.2rem;
+  color: #1e465b;
+  padding: 0 0.3rem;
 }
 
 .checkbox-group label {
@@ -153,37 +225,109 @@ textarea:focus {
   gap: 0.5rem;
   font-weight: 500;
   margin: 0;
+  padding: 0.28rem 0;
 }
 
-.checkbox-group input[type='checkbox'] {
+.checkbox-group input[type="checkbox"] {
   width: auto;
-  margin-top: 0.12rem;
+  margin-top: 0.14rem;
+  accent-color: var(--mnps-blue);
+}
+
+/* Optional semantic status classes if rendered by the app */
+.status,
+[class*="status-"] {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.status-not-started,
+.status-neutral {
+  background: #eef1f4;
+  color: #5c6570;
+}
+
+.status-in-progress,
+.status-active {
+  background: var(--mnps-blue-soft);
+  color: var(--mnps-blue);
+}
+
+.status-waiting,
+.status-pending {
+  background: var(--mnps-gold-soft);
+  color: #785600;
+}
+
+.status-complete,
+.status-done,
+.status-success {
+  background: #e7f5eb;
+  color: var(--mnps-success);
 }
 
 .helper-note {
-  margin: -0.2rem 0 0.2rem;
-  color: #586678;
+  margin: -0.2rem 0 0.25rem;
+  color: var(--mnps-muted);
   font-size: 0.92rem;
 }
 
+/* ==============================
+   Buttons
+================================= */
 button {
-  margin-top: 0.1rem;
-  background: var(--mnps-blue);
-  color: #fff;
-  border: 0;
-  border-radius: 999px;
-  padding: 0.65rem 1rem;
+  margin-top: 0.2rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 0.72rem 1rem;
   cursor: pointer;
   font-weight: 700;
+  background: var(--mnps-blue);
+  color: #fff;
+  transition: background-color 140ms ease, border-color 140ms ease, transform 80ms ease;
 }
 
 button:hover {
-  background: #00698d;
+  background: var(--mnps-blue-dark);
+}
+
+button:focus-visible {
+  outline: 3px solid rgba(0, 121, 162, 0.25);
+  outline-offset: 1px;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+/* Optional helper class for accent actions */
+.button-accent,
+button.accent {
+  background: var(--mnps-gold);
+  color: #2b2b2d;
+}
+
+.button-accent:hover,
+button.accent:hover {
+  background: #db9f22;
+}
+
+/* ==============================
+   Result / progress summary
+================================= */
+#result {
+  border-top: 5px solid var(--mnps-blue);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
 }
 
 #result p {
-  font-size: 0.96rem;
-  margin: 0 0 0.5rem;
+  font-size: 0.97rem;
+  margin: 0 0 0.55rem;
 }
 
 #total-score,
@@ -193,43 +337,52 @@ button:hover {
   font-weight: 700;
 }
 
+#total-score {
+  background: var(--mnps-blue-soft);
+  border: 1px solid #c7dde8;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+
 #score-explanation {
   margin: 0;
   padding-left: 1.15rem;
-  max-height: 45vh;
+  max-height: 44vh;
   overflow: auto;
+  border-left: 3px solid var(--mnps-light-gray);
 }
 
 #score-explanation li {
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
 }
 
 .warnings-title {
   margin-top: 1rem;
-  color: #a73b3b;
-  padding: 0.35rem 0.55rem;
-  background: #fff0f0;
-  border: 1px solid #f1c6c6;
+  color: #8d6300;
+  padding: 0.38rem 0.58rem;
+  background: var(--mnps-gold-soft);
+  border: 1px solid #f0d38e;
   border-radius: 8px;
 }
 
 .warning-list {
   margin: 0;
-  padding-left: 1.15rem;
-  border-left: 3px solid #e2a1a1;
-  background: #fff6f6;
-  border-radius: 6px;
-  padding-top: 0.45rem;
-  padding-bottom: 0.45rem;
+  padding: 0.5rem 0.7rem 0.5rem 1rem;
+  border-left: 3px solid #e0ba62;
+  background: #fffaf0;
+  border-radius: 8px;
 }
 
 .warning-list li {
-  margin-bottom: 0.3rem;
-  color: #7d2222;
+  margin-bottom: 0.32rem;
+  color: #6d4d00;
 }
 
+/* ==============================
+   Panel behavior
+================================= */
 .form-panel {
-  max-height: calc(100vh - 105px);
+  max-height: calc(100vh - 120px);
   overflow: auto;
 }
 
@@ -238,20 +391,24 @@ button:hover {
   top: 1rem;
 }
 
+.outcomes-checkboxes {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem 1rem;
+}
 
-@media (max-width: 860px) {
+/* ==============================
+   Responsive
+================================= */
+@media (max-width: 1020px) {
+  .outcomes-checkboxes {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
   .page-wrap {
     grid-template-columns: 1fr;
-  }
-
-  .site-header {
-    padding: 0 1rem;
-    height: auto;
-    min-height: 80px;
-  }
-
-  .compact-form {
-    grid-template-columns: 1fr;
+    margin-top: 1rem;
   }
 
   .result-panel {
@@ -263,14 +420,35 @@ button:hover {
   }
 }
 
-.outcomes-checkboxes {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.55rem 1rem;
-}
+@media (max-width: 680px) {
+  .site-header {
+    min-height: 84px;
+    padding: 0.8rem 1rem;
+  }
 
+  .page-wrap {
+    padding: 0 0.8rem;
+    gap: 0.9rem;
+  }
 
-@media (max-width: 1020px) {
-  .outcomes-checkboxes {
+  .panel {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .compact-form {
     grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px;
+  }
+
+  button {
+    padding: 0.8rem 1rem;
   }
 }
