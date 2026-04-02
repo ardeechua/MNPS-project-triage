@@ -5,6 +5,17 @@ var priorityLevelElement = document.getElementById('priority-level');
 var scoreExplanationElement = document.getElementById('score-explanation');
 var warningListElement = document.getElementById('warning-list');
 
+var existingSolutionAwarenessElement = document.getElementById('existing-solution-awareness');
+var existingGapWrapElement = document.getElementById('existing-gap-wrap');
+var existingSolutionGapElement = document.getElementById('existing-solution-gap');
+
+var aiComponentElement = document.getElementById('ai-component');
+var aiDetailsWrapElement = document.getElementById('ai-details-wrap');
+var aiDetailsElement = document.getElementById('ai-details');
+
+var alignmentDetailsWrapElement = document.getElementById('alignment-details-wrap');
+var alignmentDetailsElement = document.getElementById('alignment-details');
+
 function renderExplanationList(explanationItems) {
   scoreExplanationElement.innerHTML = '';
 
@@ -30,10 +41,6 @@ function renderWarningList(warningItems) {
     warningItem.textContent = warningItems[i];
     warningListElement.appendChild(warningItem);
   }
-}
-
-function includesUnsure(value) {
-  return value === 'unsure' || value === '' || value === null;
 }
 
 function evaluateSupportOwner(text) {
@@ -88,6 +95,44 @@ function evaluateSupportOwner(text) {
   };
 }
 
+function hasRealAlignment(focusedOutcomes) {
+  var blockers = {
+    'None / Not directly aligned': true,
+    Unsure: true
+  };
+
+  for (var i = 0; i < focusedOutcomes.length; i += 1) {
+    if (!blockers[focusedOutcomes[i]]) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function updateConditionalFields() {
+  var existingSelection = existingSolutionAwarenessElement.value;
+  var showExistingGap = existingSelection === 'yes' || existingSelection === 'maybe';
+  existingGapWrapElement.hidden = !showExistingGap;
+  existingSolutionGapElement.required = showExistingGap;
+
+  var aiSelection = aiComponentElement.value;
+  var showAiDetails = aiSelection && aiSelection !== 'no';
+  aiDetailsWrapElement.hidden = !showAiDetails;
+  aiDetailsElement.required = showAiDetails;
+
+  var selectedOutcomes = triageForm.querySelectorAll('input[name="focused_outcomes"]:checked');
+  var outcomes = [];
+
+  for (var i = 0; i < selectedOutcomes.length; i += 1) {
+    outcomes.push(selectedOutcomes[i].value);
+  }
+
+  var showAlignmentDetails = outcomes.length > 0 && hasRealAlignment(outcomes);
+  alignmentDetailsWrapElement.hidden = !showAlignmentDetails;
+  alignmentDetailsElement.required = showAlignmentDetails;
+}
+
 function getWarnings(values, supportEvaluation) {
   var warnings = [];
 
@@ -95,28 +140,37 @@ function getWarnings(values, supportEvaluation) {
     warnings.push(supportEvaluation.warning);
   }
 
-  if (values.supportCommitment === 'no' || values.supportCommitment === 'not_yet') {
-    warnings.push('Support group has not agreed to provide ongoing support.');
+  if (values.supportCommitment === 'no' || values.supportCommitment === 'not_yet_discussed') {
+    warnings.push('Support owner has not explicitly agreed to ongoing support.');
   }
 
-  if (values.existingSolutionAwareness === 'unsure') {
-    warnings.push('Existing solution not confirmed.');
+  if (values.existingSolutionAwareness === 'yes' || values.existingSolutionAwareness === 'maybe') {
+    warnings.push('Potential overlap with existing work; verify duplication risk before moving forward.');
   }
 
-  if (values.vendorSolution === 'yes' || values.vendorSolution === 'unsure') {
-    warnings.push('Vendor/product may already exist; evaluate buy options first.');
+  if (values.aiComponent !== 'no') {
+    warnings.push('AI involvement requires additional governance, privacy, and security review.');
   }
 
-  if (values.budgetAllocated === 'no' || values.budgetAllocated === 'unsure') {
-    warnings.push('No budget identified or funding is uncertain.');
+  if (values.integrationNeeded === 'yes' || values.integrationNeeded === 'maybe') {
+    warnings.push('Integration dependency identified; sequencing and technical review will be needed.');
   }
 
-  if (values.solutionLongevity === 'lt_1_year') {
-    warnings.push('Short-term solution may not justify build effort.');
+  if (
+    values.sensitiveData.indexOf('student') !== -1 ||
+    values.sensitiveData.indexOf('staff') !== -1 ||
+    values.sensitiveData.indexOf('financial') !== -1 ||
+    values.sensitiveData.indexOf('unsure') !== -1
+  ) {
+    warnings.push('Sensitive or uncertain data handling is involved and requires follow-up review.');
   }
 
-  if (values.aiComponent === 'yes' || values.aiComponent === 'unsure') {
-    warnings.push('AI component requires additional review (privacy, security, governance).');
+  if (values.inactionImpact === 'no_meaningful_impact') {
+    warnings.push('Request indicates no meaningful impact if unchanged; urgency may be low.');
+  }
+
+  if (!values.hasRealAlignment) {
+    warnings.push('No clear district strategic alignment was identified.');
   }
 
   return warnings;
@@ -124,148 +178,98 @@ function getWarnings(values, supportEvaluation) {
 
 function calculateScore(values, supportEvaluation) {
   var score = 0;
-
-  var urgencyScores = { low: 1, medium: 3, high: 5, critical: 6 };
+  var impactScopeScores = {
+    just_me: 0,
+    my_team: 2,
+    multiple_departments: 4,
+    district_wide: 6
+  };
+  var inactionScores = {
+    major_operational: 6,
+    moderate_inefficiency: 3,
+    minor_inconvenience: 1,
+    no_meaningful_impact: -2
+  };
   var usersImpactedScores = { '1-10': 1, '11-100': 2, '101-1000': 4, 'district-wide': 5 };
 
-  score += urgencyScores[values.urgency] || 0;
+  score += impactScopeScores[values.impactScope] || 0;
+  score += inactionScores[values.inactionImpact] || 0;
   score += usersImpactedScores[values.usersImpacted] || 0;
-
-  if (values.budgetAllocated === 'yes') {
-    score += 3;
-  } else if (values.budgetAllocated === 'no' || values.budgetAllocated === 'unsure') {
-    score -= 3;
-  }
-
-  if (values.supportCommitment === 'yes') {
-    score += 3;
-  } else if (values.supportCommitment === 'no' || values.supportCommitment === 'not_yet') {
-    score -= 4;
-  }
-
   score += supportEvaluation.score;
 
-  if (values.solutionLongevity === 'lt_1_year') {
+  if (values.supportCommitment === 'yes') {
+    score += 4;
+  } else if (values.supportCommitment === 'no') {
+    score -= 4;
+  } else if (values.supportCommitment === 'not_yet_discussed') {
     score -= 2;
   }
 
-  if (values.existingSolutionAwareness === 'unsure') {
-    score -= 2;
-  }
-
-  if (values.focusedOutcomes.length > 0) {
+  if (values.hasRealAlignment) {
     score += Math.min(values.focusedOutcomes.length, 4);
   } else {
+    score -= 2;
+  }
+
+  if (values.existingSolutionAwareness === 'yes') {
+    score -= 2;
+  } else if (values.existingSolutionAwareness === 'maybe') {
     score -= 1;
   }
 
-  if (values.focusedOutcomes.indexOf('None / Not directly aligned') !== -1 || values.focusedOutcomes.indexOf('Unsure') !== -1) {
+  if (values.aiComponent !== 'no') {
+    score -= 1;
+  }
+
+  if (values.integrationNeeded === 'yes') {
+    score -= 1;
+  }
+
+  if (values.sensitiveData.indexOf('student') !== -1 || values.sensitiveData.indexOf('staff') !== -1 || values.sensitiveData.indexOf('financial') !== -1) {
     score -= 1;
   }
 
   return score;
 }
 
-function calculatePriority(totalScore, urgency) {
-  if (urgency === 'critical' || totalScore >= 15) {
+function calculatePriority(totalScore) {
+  if (totalScore >= 14) {
     return 'High Priority';
   }
 
-  if (totalScore >= 8) {
+  if (totalScore >= 7) {
     return 'Medium Priority';
   }
 
   return 'Low Priority';
 }
 
-function determineRoute(values, warnings, supportEvaluation, totalScore) {
+function determineRoute(values, warnings) {
   var explanationItems = [];
-  var route = 'Approve – Route to Development Team';
+  var route = 'Need More Information';
 
-  var missingKeyInfo =
-    !values.postGoLiveOwner ||
-    !values.trainingPlan ||
-    !values.requestedOutcome ||
-    includesUnsure(values.requestType) ||
-    includesUnsure(values.solutionLongevity);
-
-  var supportNeedsFollowUp =
-    supportEvaluation.quality === 'missing' ||
-    supportEvaluation.quality === 'vague' ||
-    supportEvaluation.quality === 'short' ||
-    values.supportCommitment === 'no' ||
-    values.supportCommitment === 'not_yet';
-
-  if (values.requestType === 'simple_workflow' || values.requestType === 'data_reporting') {
+  if (values.requestType === 'workflow_automation' || values.requestType === 'reporting_data') {
     route = 'Approve – Route to BPA Team';
-    explanationItems.push('Request is classified as a simple workflow/automation or reporting need, so it leans to BPA Team routing.');
+    explanationItems.push('Request type aligns with workflow/reporting support and likely BPA triage.');
   }
 
-  if (values.requestType === 'new_application' || values.requestType === 'enhancement') {
+  if (values.requestType === 'enhancement_existing' || values.requestType === 'new_application') {
     route = 'Approve – Route to Development Team';
-    explanationItems.push('Request is classified as a new application/enhancement, so it leans to Development Team routing.');
-  }
-
-  if (values.requestType === 'simple_workflow' && values.estimatedComplexity === 'low' && values.supportCommitment === 'yes' && supportEvaluation.quality !== 'missing' && supportEvaluation.quality !== 'vague') {
-    route = 'Approve – Simple Task';
-    explanationItems.push('Request appears to be a low-complexity workflow with support in place, so it can be handled as a simple task.');
-  }
-
-  if (values.vendorSolution === 'yes') {
-    route = 'Recommend Buy / RFP';
-    explanationItems.push('An existing vendor solution may already meet this need, so buy/RFP evaluation is recommended first.');
-  }
-
-  if (missingKeyInfo || supportNeedsFollowUp) {
-    route = 'Need More Information';
-
-    if (supportEvaluation.quality === 'missing' || supportEvaluation.quality === 'vague' || supportEvaluation.quality === 'short') {
-      explanationItems.push('Support ownership is unclear and must be specific before approval.');
-    }
-
-    if (values.supportCommitment === 'no' || values.supportCommitment === 'not_yet') {
-      explanationItems.push('Support group has not agreed to provide ongoing support, so readiness is not sufficient yet.');
-    }
-
-    if (missingKeyInfo) {
-      explanationItems.push('Core scoping fields are incomplete or marked unsure.');
-    }
+    explanationItems.push('Request type aligns with system enhancement/new application work and development triage.');
   }
 
   if (values.existingSolutionAwareness === 'yes') {
-    explanationItems.push('An internal/existing solution was identified, so there is duplication risk to resolve.');
-  } else if (values.existingSolutionAwareness === 'unsure') {
-    explanationItems.push('Existing solution status is not confirmed, creating duplication risk.');
-  }
-
-  if (values.budgetAllocated === 'no' || values.budgetAllocated === 'unsure') {
-    explanationItems.push('No budget has been identified, which is a dependency for implementation.');
-  }
-
-  if (values.solutionLongevity === 'lt_1_year') {
-    explanationItems.push('This appears to be a short-term need, so build effort justification is weaker.');
-  }
-
-  if (values.aiComponent === 'yes' || values.aiComponent === 'unsure') {
-    explanationItems.push('AI involvement was selected, so additional review is required even if routing proceeds.');
-  }
-
-  if (
-    values.vendorSolution === 'yes' &&
-    values.existingSolutionAwareness === 'yes' &&
-    values.requestType === 'unsure'
-  ) {
-    route = 'Reject / No';
-    explanationItems.push('Both internal and vendor options exist, but the requested gap is unclear, so intake is not approved.');
-  }
-
-  if (route.indexOf('Approve') === 0 && totalScore < 5) {
     route = 'Need More Information';
-    explanationItems.push('Overall readiness score is low, so additional detail is required before approval.');
+    explanationItems.push('Possible duplication was identified and should be validated before approval.');
+  }
+
+  if (!values.postGoLiveOwner || !values.supportOwner || values.supportCommitment !== 'yes') {
+    route = 'Need More Information';
+    explanationItems.push('Ownership and support readiness are not fully confirmed.');
   }
 
   if (warnings.length > 0) {
-    explanationItems.push('Warnings/Risks were triggered and should be addressed during next review.');
+    explanationItems.push('Warnings were flagged and should be resolved in follow-up triage.');
   }
 
   if (explanationItems.length === 0) {
@@ -275,40 +279,44 @@ function determineRoute(values, warnings, supportEvaluation, totalScore) {
   return { route: route, explanationItems: explanationItems };
 }
 
+existingSolutionAwarenessElement.addEventListener('change', updateConditionalFields);
+aiComponentElement.addEventListener('change', updateConditionalFields);
+triageForm.addEventListener('change', function (event) {
+  if (event.target && event.target.name === 'focused_outcomes') {
+    updateConditionalFields();
+  }
+});
+
 triageForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
   var formData = new FormData(triageForm);
-
+  var focusedOutcomes = formData.getAll('focused_outcomes');
   var values = {
-    requestedOutcome: (formData.get('requested_outcome') || '').trim(),
+    problemStatement: (formData.get('problem_statement') || '').trim(),
     postGoLiveOwner: (formData.get('post_go_live_owner') || '').trim(),
     supportOwner: (formData.get('support_owner') || '').trim(),
     supportCommitment: formData.get('support_commitment'),
-    trainingPlan: (formData.get('training_plan') || '').trim(),
     requestType: formData.get('request_type'),
     existingSolutionAwareness: formData.get('existing_solution_awareness'),
     aiComponent: formData.get('ai_component'),
-    urgency: formData.get('urgency'),
+    integrationNeeded: formData.get('integration_needed'),
+    sensitiveData: formData.getAll('sensitive_data'),
+    impactScope: formData.get('impact_scope'),
+    inactionImpact: formData.get('inaction_impact'),
     usersImpacted: formData.get('users_impacted'),
-    estimatedComplexity: formData.get('estimated_complexity'),
-    vendorSolution: formData.get('vendor_solution'),
-    budgetAllocated: formData.get('budget_allocated'),
-    solutionLongevity: formData.get('solution_longevity'),
-    teamsSpoken: formData.getAll('teams_spoken'),
-    focusedOutcomes: formData.getAll('focused_outcomes')
+    focusedOutcomes: focusedOutcomes,
+    hasRealAlignment: hasRealAlignment(focusedOutcomes)
   };
 
   var supportEvaluation = evaluateSupportOwner(values.supportOwner);
   var totalScore = calculateScore(values, supportEvaluation);
-  var priorityLevel = calculatePriority(totalScore, values.urgency);
+  var priorityLevel = calculatePriority(totalScore);
   var warnings = getWarnings(values, supportEvaluation);
-  var routeResult = determineRoute(values, warnings, supportEvaluation, totalScore);
+  var routeResult = determineRoute(values, warnings);
 
   routeResult.explanationItems.unshift(
-    'Priority level is ' +
-      priorityLevel +
-      ' based on urgency, user impact, support readiness, budget readiness, and selected district outcomes.'
+    'Priority is based on impact scope, consequence of inaction, scale, ownership/support readiness, and district alignment.'
   );
 
   totalScoreElement.textContent = String(totalScore);
@@ -317,3 +325,5 @@ triageForm.addEventListener('submit', function (event) {
   renderExplanationList(routeResult.explanationItems);
   renderWarningList(warnings);
 });
+
+updateConditionalFields();
