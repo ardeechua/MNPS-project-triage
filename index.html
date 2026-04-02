@@ -21,6 +21,14 @@
       <h1>MNPS Project Intake</h1>
       <p>Submit this guided intake to quickly route and prioritize your request.</p>
 
+      <div id="intake-health" class="intake-health status-clarify" role="status" aria-live="polite">
+        <strong>Intake health:</strong> <span id="intake-health-label">Needs clarification</span>
+      </div>
+
+      <ul id="inline-warning-list" class="inline-warning-list" aria-live="polite">
+        <li>Complete key fields to see live guidance.</li>
+      </ul>
+
       <form id="triage-form" class="compact-form" action="#" method="post">
         <h2 class="section-title field-full">1) Problem and Request Basics</h2>
 
@@ -78,6 +86,11 @@
           </select>
         </p>
 
+        <p id="low-impact-wrap" class="field field-full" hidden>
+          <label for="low-impact-justification">Why should this still be prioritized?</label><br>
+          <textarea id="low-impact-justification" name="low_impact_justification" rows="3"></textarea>
+        </p>
+
         <h2 class="section-title field-full">3) Existing Work / Duplication</h2>
 
         <p class="field field-full">
@@ -91,8 +104,13 @@
         </p>
 
         <p id="existing-gap-wrap" class="field field-full" hidden>
-          <label for="existing-solution-gap">If yes or maybe, why is the current option not sufficient?</label><br>
+          <label for="existing-solution-gap">What specifically does the current solution not do?</label><br>
           <textarea id="existing-solution-gap" name="existing_solution_gap" rows="3"></textarea>
+        </p>
+
+        <p id="existing-talked-wrap" class="field field-full" hidden>
+          <label for="existing-talked-to">Who have you already talked to about this?</label><br>
+          <input type="text" id="existing-talked-to" name="existing_talked_to">
         </p>
 
         <h2 class="section-title field-full">4) Ownership and Support</h2>
@@ -153,9 +171,24 @@
           </select>
         </p>
 
-        <p id="ai-details-wrap" class="field field-full" hidden>
-          <label for="ai-details">What will the AI do?</label><br>
-          <textarea id="ai-details" name="ai_details" rows="3"></textarea>
+        <p id="ai-task-wrap" class="field field-full" hidden>
+          <label for="ai-task">What task or decision is AI performing?</label><br>
+          <textarea id="ai-task" name="ai_task" rows="3"></textarea>
+        </p>
+
+        <p id="ai-data-wrap" class="field field-full" hidden>
+          <label for="ai-data">What data will the AI use?</label><br>
+          <textarea id="ai-data" name="ai_data" rows="3"></textarea>
+        </p>
+
+        <p id="ai-human-review-wrap" class="field" hidden>
+          <label for="ai-human-review">Will a human review AI outputs before action?</label><br>
+          <select id="ai-human-review" name="ai_human_review">
+            <option value="">Select one</option>
+            <option value="always">Always</option>
+            <option value="sometimes">Sometimes</option>
+            <option value="no">No</option>
+          </select>
         </p>
 
         <p class="field">
@@ -213,9 +246,31 @@
         </fieldset>
 
         <p id="alignment-details-wrap" class="field field-full" hidden>
-          <label for="alignment-details">How does this request support that priority?</label><br>
+          <label for="alignment-details">How does this request support that initiative?</label><br>
           <textarea id="alignment-details" name="alignment_details" rows="3"></textarea>
         </p>
+
+        <section id="qualified-followup" class="field-full followup-panel" hidden aria-live="polite">
+          <h3>Qualified Follow-up (Optional)</h3>
+          <p class="helper-note">Your request appears ready for deeper intake details.</p>
+          <p class="field">
+            <label for="vendor-known">Vendor or product already known?</label><br>
+            <input type="text" id="vendor-known" name="vendor_known" placeholder="Example: PowerSchool plugin, Microsoft tool, etc.">
+          </p>
+          <p class="field">
+            <label for="budget-status">Budget status</label><br>
+            <select id="budget-status" name="budget_status">
+              <option value="">Select one</option>
+              <option value="identified">Budget identified</option>
+              <option value="pending">Budget pending</option>
+              <option value="unknown">Budget unknown</option>
+            </select>
+          </p>
+          <p class="field field-full">
+            <label for="followup-notes">Other follow-up notes</label><br>
+            <textarea id="followup-notes" name="followup_notes" rows="3"></textarea>
+          </p>
+        </section>
 
         <p class="field field-full">
           <button type="submit">Calculate Intake Result</button>
@@ -228,10 +283,23 @@
       <p>Total Score: <span id="total-score">0</span></p>
       <p>Recommended Route: <span id="recommended-route">Not calculated yet</span></p>
       <p>Priority Level: <span id="priority-level">Not calculated yet</span></p>
+
+      <h3>Intake Status</h3>
+      <p><span id="result-health" class="result-status status-clarify">Needs clarification</span></p>
+
+      <h3>Next Step Guidance</h3>
+      <p id="next-step-message">Submit the form to generate routing guidance.</p>
+
+      <h3>Routing Tags</h3>
+      <div id="routing-tags" class="tags-wrap" aria-live="polite">
+        <span class="tag-chip">No tags yet</span>
+      </div>
+
       <h3>Why This Result</h3>
       <ul id="score-explanation">
         <li>Submit the form to see routing guidance and reasons.</li>
       </ul>
+
       <h3 class="warnings-title">Warnings / Risks</h3>
       <ul id="warning-list" class="warning-list">
         <li>No warnings flagged yet.</li>
