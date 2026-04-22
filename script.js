@@ -31,6 +31,7 @@ var aiHumanReviewElement = document.getElementById('ai-human-review');
 
 var alignmentDetailsWrapElement = document.getElementById('alignment-details-wrap');
 var alignmentDetailsElement = document.getElementById('alignment-details');
+var submissionDateElement = document.getElementById('submission-date');
 
 var qualifiedFollowupElement = document.getElementById('qualified-followup');
 
@@ -179,6 +180,18 @@ function updateConditionalFields() {
   var showAlignmentDetails = values.focusedOutcomes.length > 0 && values.hasRealAlignment;
   alignmentDetailsWrapElement.hidden = !showAlignmentDetails;
   alignmentDetailsElement.required = showAlignmentDetails;
+}
+
+function initializeSubmissionDate() {
+  if (!submissionDateElement || submissionDateElement.value) {
+    return;
+  }
+
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = String(today.getMonth() + 1).padStart(2, '0');
+  var day = String(today.getDate()).padStart(2, '0');
+  submissionDateElement.value = year + '-' + month + '-' + day;
 }
 
 function generateWarnings(values, supportEvaluation) {
@@ -539,4 +552,5 @@ triageForm.addEventListener('input', refreshLiveState);
 triageForm.addEventListener('change', refreshLiveState);
 triageForm.addEventListener('submit', handleSubmit);
 
+initializeSubmissionDate();
 refreshLiveState();
