@@ -29,9 +29,7 @@ body {
   min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
   color: var(--mnps-text);
-  background:
-    linear-gradient(180deg, rgba(0, 121, 162, 0.08) 0, rgba(0, 121, 162, 0) 240px),
-    var(--surface-alt);
+  background: red;
   line-height: 1.5;
 }
 
